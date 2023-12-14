@@ -2,13 +2,13 @@ const e = require("express");
 const asyncHandler= require("express-async-handler");
 const { off } = require("../models/userModel");
 const User = require("../models/userModel");
-
+const generateToken= require("../config/generateToken")
 const registerUser =asyncHandler(async(req,res)=>{
 const{name, email, password, pic}= req.body;
 
 
-if(!name || email|| password){
-    resizeBy.status(400);
+if(!name || !email|| !password){
+    res.status(400);
     throw new Error("Please enter all the fields")
 }
 const userExists= await User.findOne({email})
@@ -31,6 +31,7 @@ if(user){
         name:user.name,
         email:user.email,
         pic:user.pic,
+        token:generateToken(user._id)
 
     })
 } else{

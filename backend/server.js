@@ -5,10 +5,13 @@ const dotenv= require("dotenv");
 const connectDB = require("./config/db");
 const colors= require("colors")
 const userRoutes= require("./routes/userRoutes")
-const app= express()
+
 dotenv.config();
 connectDB()
+const app= express()
 
+
+app.use(express.json()) // to accept JSON DATA
 app.get("/",(req,res)=>{
 res.send("API is Running");
 });
