@@ -5,7 +5,8 @@ import { Input, InputGroup, InputRightElement } from '@chakra-ui/input'
 import { useState } from 'react'
 import { Button } from "@chakra-ui/button";
 import { useToast } from '@chakra-ui/react'
-import axios from 'axios';
+import axios from 'axios'
+import { useHistory } from 'react-router-dom'
 
 const Signup = () => {
 const [show, setShow] = useState(false)
@@ -16,6 +17,8 @@ const [show, setShow] = useState(false)
       const [pic, setPic] = useState()
 const [loading, setLoading]= useState(false)
 const toast = useToast()
+
+const history= useHistory()
       const handleClick=()=> setShow(!show);
   
  const postDetails = (pics) => {
@@ -91,6 +94,60 @@ const toast = useToast()
 
   const submitHandler=async()=>{
     setLoading(true)
+    if(!name || !email || !password || !confirmpassword){
+      toast({
+        title:"Please Fill all the fields",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom"
+      })
+      setLoading(false)
+      return;
+    }
+
+    if(password!== confirmpassword){
+      toast({
+        title:"Passwords donot match",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom"
+
+      })
+      return;
+    }
+    try {
+      const config={
+        headers:{
+          "Content-type":"application/json",
+        }
+      }
+      const {data} = await axios.post("/api/user",{name,email,password,pic},config)
+
+toast({
+  title:"Registration Sucessfull",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom"
+})
+localStorage.setItem('userInfo',JSON.stringify(data))
+setLoading(false)
+history.push('/chats')
+
+
+    } catch (error) {
+      toast({
+  title:"Error Occured",
+  description: error.response.data.message,
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom"
+})
+      
+    }
 
   }
 
