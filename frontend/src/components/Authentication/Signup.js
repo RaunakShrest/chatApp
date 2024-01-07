@@ -4,6 +4,8 @@ import React from 'react'
 import { Input, InputGroup, InputRightElement } from '@chakra-ui/input'
 import { useState } from 'react'
 import { Button } from "@chakra-ui/button";
+import { useToast } from '@chakra-ui/react'
+import axios from 'axios';
 
 const Signup = () => {
 const [show, setShow] = useState(false)
@@ -12,15 +14,83 @@ const [show, setShow] = useState(false)
     const [password, setPassword] = useState()
      const [confirmpassword, setconfirmpassword] = useState()
       const [pic, setPic] = useState()
-
-
+const [loading, setLoading]= useState(false)
+const toast = useToast()
       const handleClick=()=> setShow(!show);
   
-  const postDetails=(pics)=>{
+ const postDetails = (pics) => {
+  setLoading(true);
 
+  if (pics === undefined) {
+    toast({
+      title: "Please Select an Image!",
+      status: "warning",
+      duration: 5000,
+      isClosable: true,
+      position: "bottom",
+    });
+    setLoading(false);
+    return;
   }
 
-  const submitHandler=()=>{
+  if (pics.type !== "image/jpeg" && pics.type !== "image/png") {
+    toast({
+      title: "Please Select a JPEG or PNG Image!",
+      status: "warning",
+      duration: 5000,
+      isClosable: true,
+      position: "bottom",
+    });
+    setLoading(false);
+    return;
+  }
+
+  const data = new FormData();
+  data.append("file", pics); // Check if "file" is the correct key expected by Cloudinary
+  data.append("upload_preset", "chat-app");
+  data.append("cloud_name", "dboot4gi3");
+
+  axios.post("https://api.cloudinary.com/v1_1/dboot4gi3/image/upload", data) // Update "cloudname" in the URL
+    .then((response) => {
+      console.log("Cloudinary response:", response);
+
+      if (response.data && response.data.url) {
+        setPic(response.data.url.toString());
+        toast({
+          title: "Image uploaded successfully!",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+      } else {
+        toast({
+          title: "Error uploading image to Cloudinary.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+      }
+
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.log("Cloudinary error:", error);
+      toast({
+        title: "Error uploading image to Cloudinary.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+    });
+};
+
+
+  const submitHandler=async()=>{
+    setLoading(true)
 
   }
 
@@ -74,7 +144,7 @@ const [show, setShow] = useState(false)
         <FormLabel>Upload your picture</FormLabel>
         <Input type="file"
         p={1.5}
-        accept="iamge/*"
+        accept="image/*"
         onChange={(e)=> postDetails(e.target.files[0])}
 />     
         </FormControl>
@@ -83,6 +153,7 @@ const [show, setShow] = useState(false)
         width="100%"
         style={{marginTop:15}}
         onClick={submitHandler} 
+        isLoading={loading}
       > Sign Up
 </Button>
     </VStack>
