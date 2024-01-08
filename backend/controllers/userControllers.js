@@ -59,4 +59,18 @@ const authUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid Email or Password");
   }
 });
-module.exports={registerUser, authUser};
+
+// for id you write req.params but for query you write req.query
+const allUsers= asyncHandler(async(req,res)=>{
+  const keyword= req.query.search ?{
+    $or:[
+      {name:{$regex:req.query.search, $options: "i"}},
+      {email:{$regex:req.query.search, $options: "i"}},
+    ]
+  }  //above lines means its either searching inside of name or email if any of the queries match then its gonna retrun it
+:{} // else we are not gonna do anything
+
+const users= await (await User.find(keyword))
+res.send(users)
+})
+module.exports={registerUser, authUser, allUsers};
