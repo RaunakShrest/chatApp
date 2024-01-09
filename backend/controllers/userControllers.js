@@ -53,6 +53,7 @@ const authUser = asyncHandler(async (req, res) => {
       isAdmin: user.isAdmin,
       pic: user.pic,
       token: generateToken(user._id),
+      
     });
   } else {
     res.status(401);
@@ -70,7 +71,8 @@ const allUsers= asyncHandler(async(req,res)=>{
   }  //above lines means its either searching inside of name or email if any of the queries match then its gonna retrun it
 :{} // else we are not gonna do anything
 
-const users= await (await User.find(keyword))
+const users= await User.find(keyword).find({_id:{$ne:req.user._id}})
+
 res.send(users)
 })
 module.exports={registerUser, authUser, allUsers};
