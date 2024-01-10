@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useState } from 'react';
-import { Menu, Tooltip, MenuButton, MenuList, MenuItem, MenuDivider, useToast, } from "@chakra-ui/react";
+import { Menu, Tooltip, MenuButton, MenuList, MenuItem, MenuDivider, useToast, Spinner, } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Box, Text } from "@chakra-ui/layout";
 import { Button } from '@chakra-ui/button';
@@ -94,6 +94,7 @@ headers:{
 
        const {data} = await axios.post('/api/chat',{userId},config)
 
+       if(!chats.find((c)=>c._id === data._id)) setChats([data, ...chats])
        setSelectedChat(data)
        setLoadingChat(false)
        onClose()
@@ -133,22 +134,28 @@ headers:{
 
         {/* Adjusted alignment using Tailwind CSS classes */}
         <div className="flex items-center justify-between w-full">
-           <Text fontSize="2x1" fontFamily="Work sans" >
+           <Text fontSize="2x1" fontFamily="Work sans" textAlign="center"  fontWeight="bold">
             Talk-A-Tive
           </Text>
 
           <div className="flex items-start">
             <Menu>
-              <MenuButton p={1}>
-                <BellIcon fontSize="2xl" m={1} />
-              </MenuButton>
+              <MenuButton p={1} position="absolute" right="100" top="2">
+  <BellIcon fontSize="2xl" m={1} />
+</MenuButton>
               {/* {<MenuList> </MenuList>} */}
             </Menu>
             <Menu>
-              <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-              <Avatar size='sm' cursor='pointer' name={user.name}  src={user.pic}/>
-  
-              </MenuButton>
+           <MenuButton
+  as={Button}
+  rightIcon={<ChevronDownIcon />}
+  position="absolute"
+  top="0"
+  right="0"
+  m={2} // Add margin for spacing
+>
+  <Avatar size='sm' cursor='pointer' name={user.name}  src={user.pic}/>
+</MenuButton>
 
               <MenuList>
                 <ProfileModel user={user}>
@@ -195,6 +202,7 @@ searchResult?.map(user=>(
 )
 
 }
+{loadingChat && <Spinner ml="auto" d="flex" />}
 </DrawerBody>
 </DrawerContent>
 
