@@ -4,7 +4,7 @@ import React from 'react'
 import { getSender,  getSenderFull} from '../config/ChatLogics'
 import { ChatState } from '../Context/ChatProvider'
 import ProfileModal from './miscellaneous/ProfileModel'
-
+import UpdateGroupChatModel from './miscellaneous/UpdateGroupChatModel'
 const SingleChat = ({fetchAgain, setFetchAgain}) => {
   
   
@@ -34,14 +34,29 @@ fontSize={{ base: "28px", md: "30px" }}
                     user={getSenderFull(user, selectedChat.users)}/>
             
             </>):(<>{selectedChat.chatName.toUpperCase()}
-             {/* <UpdateGroupChatModal
-                    fetchMessages={fetchMessages}
+             <UpdateGroupChatModel
+            
                     fetchAgain={fetchAgain}
                     setFetchAgain={setFetchAgain}
-                  /> */}
+                  />
                   </>)}
     
-    </Text> </>) :(
+    </Text>
+    <Box
+    d="flex"
+            flexDir="column"
+            justifyContent="flex-end"
+            p={3}
+            bg="#E8E8E8"
+            w="100%"
+            h="100%"
+            borderRadius="lg"
+            overflowY="hidden">
+
+
+    </Box>
+    
+     </>) :(
     
     <Box d= "flex" alignItems="center" justifyContent="center" h="100%">
 <Text fontSize="6x1" pb={3} fontFamily="Work sans">
