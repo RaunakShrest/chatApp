@@ -10,7 +10,7 @@ import { Button } from '@chakra-ui/button';
 
 import { getSender } from '../../config/ChatLogics'
 import GroupChatModel from './GroupChatModel';
-export const MyChats = () => {
+export const MyChats = (fetchAgain) => {
 const[loggedUser, setloggedUser]= useState()
   const {selectedChat, setSelectedChat, user, chats, setChats}= ChatState()
 
@@ -43,7 +43,7 @@ const[loggedUser, setloggedUser]= useState()
     setloggedUser(JSON.parse(localStorage.getItem("userInfo")))
     fetchChats()
 
-  },[])
+  },[fetchAgain])
   return (
 <Box
   d={{ base: selectedChat ? "none" : "flex", md: "flex" }}
