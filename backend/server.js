@@ -6,6 +6,7 @@ const connectDB = require("./config/db");
 const colors= require("colors")
 const userRoutes= require("./routes/userRoutes")
 const chatRoutes= require("./routes/chatRoutes")
+const messageRoutes= require("./routes/messageRoutes")
 const {notFound,errorHandler}=require("./middlewares/errorMiddleware")
 
 dotenv.config();
@@ -21,7 +22,7 @@ res.send("API is Running");
 
 app.use('/api/user',userRoutes)
 app.use('/api/chat', chatRoutes)
-
+app.use('/api/message',messageRoutes)
 
 app.use(notFound) // if all of the above url does not exist its gonna fall to this function
 app.use(errorHandler)
