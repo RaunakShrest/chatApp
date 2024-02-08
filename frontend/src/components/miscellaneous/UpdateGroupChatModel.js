@@ -6,7 +6,7 @@ import { ChatState } from '../../Context/ChatProvider';
 import UserBadgeItem from '../UserAvatar/UserBadgeItem';
 import axios from 'axios';
 import UserListItem from '../UserAvatar/UserListItem';
-const UpdateGroupChatModel = (fetchAgain, setFetchAgain) => {
+const UpdateGroupChatModel = (fetchAgain, setFetchAgain, fetchMessages) => {
   const {selectedChat, setSelectedChat, user}= ChatState();
  const [groupChatName, setGroupChatName] = useState();
 
@@ -50,7 +50,7 @@ const UpdateGroupChatModel = (fetchAgain, setFetchAgain) => {
  //if the user has removed the group then we have setSelectedChat as empty coz obivo we dont want to see the left group mesg anymore
       user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
       setFetchAgain(!fetchAgain);
-    //   fetchMessages();
+      fetchMessages();
       setLoading(false);
     } catch (error) {
       toast({
