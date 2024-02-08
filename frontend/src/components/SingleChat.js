@@ -35,6 +35,7 @@ const toast= useToast()
         `/api/message/${selectedChat._id}`,
         config
       );
+      console.log(messages)
       setMessages(data);
       setLoading(false);
 
@@ -51,10 +52,12 @@ const toast= useToast()
     }
   };
 
-useEffect(()=>{
-  fetchMessages()
+ useEffect(() => {
+    fetchMessages();
 
-},[selectedChat]) // whenever selectedChat changes its gonna fetch again
+   
+    // eslint-disable-next-line
+  }, [selectedChat]); // whenever selectedChat changes its gonna fetch again
 
  const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
@@ -171,9 +174,9 @@ fontSize={{ base: "28px", md: "30px" }}
     value={newMessage}
     onChange={typingHandler}
     style={{
-        position: 'relative',
-        top: '492px',
-        left: '0%'
+        position: 'fixed',
+        top: '659px',
+        left: '33%'
     }}
 />
 
