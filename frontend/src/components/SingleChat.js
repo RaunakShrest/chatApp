@@ -141,7 +141,7 @@ fontSize={{ base: "28px", md: "30px" }}
             w="100%"
             h="90%"
             borderRadius="lg"
-            overflowY="hidden"
+            overflowY="scroll"
           >
             {loading ? (
               <Spinner
