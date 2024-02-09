@@ -168,8 +168,8 @@ fontSize={{ base: "28px", md: "30px" }}
             >
             
             <Input
-    variant="filled"
-    bg="#E0E0E0"
+    
+    bg="transparent"
     placeholder="Enter a message.."
     value={newMessage}
     onChange={typingHandler}
