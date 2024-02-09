@@ -44,6 +44,7 @@ const toast= useToast()
       console.log(messages)
       setMessages(data);
       setLoading(false);
+      socket.emit('join chat',selectedChat._id)
 
       
     } catch (error) {
@@ -108,7 +109,7 @@ const toast= useToast()
   }, [])
 
 
-  
+
   const typingHandler=(e)=>{
     setNewMessage(e.target.value)
 
