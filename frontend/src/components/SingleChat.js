@@ -58,17 +58,51 @@ const toast= useToast()
       });
     }
   };
+    useEffect(()=>{
+
+    socket= io(ENDPOINT)
+    socket.emit("setup",user)
+    socket.on('connection',()=>setSocketConnected(true))
+  }, [user])
+
 
  useEffect(() => {
     fetchMessages();
 
-   
+   selectedChatCompare= selectedChat
     // eslint-disable-next-line
   }, [selectedChat]); // whenever selectedChat changes its gonna fetch again
 
+useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      if (
+        !selectedChatCompare || // if chat is not selected or doesn't match current chat
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+        // if (!notification.includes(newMessageRecieved)) {
+        //   setNotification([newMessageRecieved, ...notification]);
+        //   setFetchAgain(!fetchAgain);
+        // }
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+  });
+
+//   useEffect(() => {
+//   socket.on("message received", (newMessageReceived) => {
+//     if (!selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id) {
+//       // This message is not for the current chat, you can handle it as needed
+//     } else {
+//       setMessages([...messages, newMessageReceived]);
+//     }
+//   });
+// }, [selectedChatCompare, messages]);
+
+
  const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
-      
+      socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
           headers: {
@@ -85,7 +119,7 @@ const toast= useToast()
           },
           config
         );
-
+        socket.emit("new message", data);
         setMessages([...messages, data]);
       } catch (error) {
         toast({
@@ -101,12 +135,6 @@ const toast= useToast()
   };
 
 
-  useEffect(()=>{
-
-    socket= io(ENDPOINT)
-    socket.emit("setup",user)
-    socket.on('connection',()=>setSocketConnected(true))
-  }, [])
 
 
 
